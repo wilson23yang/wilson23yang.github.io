@@ -64,13 +64,22 @@
     </div> <!-- end #posts-list -->
 </aside> <!-- end #sidebar -->
 
+
 <div id="post">
     <div id="pjax">
         <article id="post__content">
             <h1 class="post__title">基于GRPC的应用开发基础框架</h1>
         </article> <!-- end #post__content -->
     </div> <!-- end #pjax -->
-</div> <!-- end #post -->
+</div>
+
+<div id="content_mk"></div>
+
+<script>
+    $.get('https://github.com/wilson23yang/candlesticks/blob/master/README.md', function(response, status, xhr){
+        $("#content_mk").html(marked(response));
+    });
+</script><!-- end #post -->
 
 <button id="js-fullscreen"><span id="icon-arrow" class="fontello"></span></button>
 <button id="js-toc"><span id="icon-list" class="fa fa-list-ul"></span></button>
