@@ -65,6 +65,16 @@
 </aside> <!-- end #sidebar -->
 
 
+<div id="tab_1">
+    <iframe src="https://github.com/wilson23yang/candlesticks"
+            height="500"
+            width="600"
+            frameborder="0"
+            scrolling="0"
+    ></iframe>
+</div>
+
+
 <div id="post">
     <div id="pjax">
         <article id="post__content">
@@ -73,13 +83,6 @@
     </div> <!-- end #pjax -->
 </div>
 
-<div id="content_mk"></div>
-
-<script>
-    $.get('https://github.com/wilson23yang/candlesticks/blob/master/README.md', function(response, status, xhr){
-        $("#content_mk").html(marked(response));
-    });
-</script><!-- end #post -->
 
 <button id="js-fullscreen"><span id="icon-arrow" class="fontello"></span></button>
 <button id="js-toc"><span id="icon-list" class="fa fa-list-ul"></span></button>
