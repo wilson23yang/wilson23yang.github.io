@@ -1,10 +1,89 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <!--[if lte IE 9]>
+    <meta http-equiv="refresh" content="0;url=/ie.html"><![endif]-->
+
+    <title>Wilson的博客</title>
+    <meta name="description" content="">
+
+    <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css">
+
 </head>
 <body>
+<aside id="sidebar">
+    <nav id="tags">
+        <a href="/index.html" id="avatar"></a>
 
+        <ul id="tags__ul">
+            <li id="js-label1" class="tags__li tags-btn">Flutter<span class="post_count"></span></li>
+            <li id="js-label2" class="tags__li tags-btn">Android<span class="post_count"></span></li>
+            <li id="js-label3" class="tags__li tags-btn">Goland<span class="post_count"></span></li>
+            <li id="js-label4" class="tags__li tags-btn">Database<span class="post_count"></span></li>
+            <li id="js-label5" class="tags__li tags-btn">Linux<span class="post_count"></span></li>
+        </ul>
+
+        <div id="tags__bottom">
+            <a href="mailto:2540943197@qq.com" id="icon-email" class="tags-btn fontello"></a>
+            <a href="/rss.xml" id="icon-feed" class="tags-btn fontello"></a>
+        </div>
+    </nav> <!-- end #tags -->
+
+    <div id="posts-list">
+        <form action="" id="search-form">
+            <a href="/index.html" id="mobile-avatar"></a>
+            <!-- NOTE: input field is disabled by default -->
+            <input id="search-input" type="text" placeholder="Search..." disabled>
+        </form>
+
+        <nav id="pl__container">
+            <a class="Flutter pl__all" href="/Flutter/K线图%20Candlesticks.html">
+                <span class="pl__circle"></span>
+                <span class="pl__title">基于GRPC的应用开发基础框架</span>
+                <span class="pl__date">Aug 2019</span>
+            </a>
+            <a class="Flutter pl__all" href="/Flutter/通用工具整理.html">
+                <span class="pl__circle"></span>
+                <span class="pl__title">通用工具整理</span>
+                <span class="pl__date">Aug 2019</span>
+            </a>
+            <a class="Flutter pl__all" href="/Flutter/smart%20widget.html">
+                <span class="pl__circle"></span>
+                <span class="pl__title">smart widget</span>
+                <span class="pl__date">Aug 2019</span>
+            </a>
+            <a class="Flutter pl__all" href="/Flutter/K线图%20Candlesticks.html">
+                <span class="pl__circle"></span>
+                <span class="pl__title">K线图 Candlesticks</span>
+                <span class="pl__date">Aug 2019</span>
+            </a>
+        </nav>
+    </div> <!-- end #posts-list -->
+</aside> <!-- end #sidebar -->
+
+<div id="post">
+    <div id="pjax">
+        <article id="post__content">
+            <h1 class="post__title">基于GRPC的应用开发基础框架</h1>
+        </article> <!-- end #post__content -->
+    </div> <!-- end #pjax -->
+</div> <!-- end #post -->
+
+<button id="js-fullscreen"><span id="icon-arrow" class="fontello"></span></button>
+<button id="js-toc"><span id="icon-list" class="fa fa-list-ul"></span></button>
+<div id="post__toc">
+    <span id="post__toc-title">目录</span>
+    <ul id="post__toc-ul"></ul>
+</div>
+
+<script src="/assets/js/jquery-2.0.3.min.js"></script>
+<script src="/assets/js/jquery.pjax.js"></script>
+<script src="/assets/js/nprogress.js"></script>
+<script src="/assets/js/script.js"></script>
+<script type="text/javascript"
+        src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 </body>
 </html>
