@@ -49,6 +49,129 @@
 </div>
 
 
+<div class="Box-body">
+    <article class="markdown-body entry-content p-5" itemprop="text"><h1><a id="user-content-应用开发框架" class="anchor" aria-hidden="true" href="#应用开发框架"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>应用开发框架</h1>
+        <h2><a id="user-content-1应用模块可配置" class="anchor" aria-hidden="true" href="#1应用模块可配置"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>1.应用模块可配置</h2>
+        <pre><code>主页应用模块可动态配置设整，增删模块可通过ModuleConfig进行配置，无需修改MainPage。ModuleConfig配置示例如下：
+</code></pre>
+        <pre><code>///模块定义与配置
+class ModuleConfig{
+  ///首页
+  static Module _home = Module(
+    ModuleKey.home,
+    name: StringWrapper((context) =&gt; MyLocalizations.of(context).home),
+    desc: 'home',
+    icon: ImageTheme.instance().nav_home_n,
+    iconPress: ImageTheme.instance().nav_home_p,
+    entrance: (context,{p1,p2,p3}) =&gt; HomePage(),
+  );
+
+  ///我的
+  static Module _mine = Module(
+    ModuleKey.mine,
+    name: StringWrapper((context) =&gt; MyLocalizations.of(context).mime),
+    desc: 'mine',
+    icon: ImageTheme.instance().nav_my_n,
+    iconPress: ImageTheme.instance().nav_my_p,
+    entrance: (context,{p1,p2,p3}) =&gt; MyPage(),
+  );
+
+
+  ///app模块
+  static List&lt;Module&gt; _modules = [_home, ... ,_mine];
+
+  static const int initTabIndex = 0;
+
+  ...
+
+}
+
+</code></pre>
+        <h2><a id="user-content-2网络基于grpc" class="anchor" aria-hidden="true" href="#2网络基于grpc"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>2.网络基于GRPC</h2>
+        <pre><code>网络模块基于GRPC,并对GRPC请求与响应进行统一封装处理，调用简单方便
+
+a.GRPC请求与响应进行统一封装处理
+    位于：lib/infrastructures/api/api_request.dart
+
+    static Future&lt;T&gt; grpcFuture&lt;T,K&gt;({@required String tag, @required GRPCCall grpcCall,
+    @required GRPCRequest&lt;K&gt; request,GRPCResponse&lt;T&gt; response,
+    bool printDebugLog = true,bool cancelDoubleCall = false}) async
+    {
+        ...
+    }
+
+b.错误码统一定义与管理，可对共性错误码统一处理
+
+c.调用示例：
+```
+Future&lt;RegisterRes&gt; register({@required String name,@required String password,@required String inviteCode}){
+  return ApiRequest.grpcFuture(
+    tag: 'register',
+    request: () async {
+      var pwd = Utf8Encoder().convert(password);
+      var digest = md5.convert(pwd);
+      return RegisterReq()..name=name..passwordMd5=hex.encode(digest.bytes)..parentCode=Int64(int.parse(inviteCode));
+    },
+    grpcCall: (request) =&gt; GRPCManager.getAccountNoAuthClient().register(request),
+    response: ({rsp,headers}) =&gt; rsp,
+  );
+}
+```
+</code></pre>
+        <h2><a id="user-content-3资源管理" class="anchor" aria-hidden="true" href="#3资源管理"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>3.资源管理</h2>
+        <pre><code>资源管理包括：应用主题、颜色、图片、字符串常量、样式。【/lib/res】
+
+
+a.主题管理
+    通过lib/res/theme_manager.dart  ThemeManager可切换应用主题，如白天黑夜模式
+
+b.图片
+    将图片资源根据主题在ImageTheme中定义，然后通过lib/res/images/script.dart生成对应主题资源源文件供调用
+
+c.颜色
+    将颜色资源根据主题在ColorTheme中定义，然后通过lib/res/colors/script.dart生成对应主题资源源文件供调用
+
+d.样式
+    页面样式按功能模块统一管理
+
+e.字符串常量及国际化
+    /lib/res/localizations
+</code></pre>
+        <h2><a id="user-content-4redux之实时状态传送更新与持久化" class="anchor" aria-hidden="true" href="#4redux之实时状态传送更新与持久化"><svg class="octicon octicon-link" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z"></path></svg></a>4.redux之实时状态传送更新与持久化</h2>
+    </article>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</main>
+</div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 <button id="js-fullscreen"><span id="icon-arrow" class="fontello"></span></button>
 <button id="js-toc"><span id="icon-list" class="fa fa-list-ul"></span></button>
 <div id="post__toc">
