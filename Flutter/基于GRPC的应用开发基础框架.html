@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css">
+    <link rel="import" href="flutter_list.html" id="aside_list"/>
 
 </head>
 <body>
@@ -32,7 +33,9 @@
         </div>
     </nav> <!-- end #tags -->
 
-    <include src="/Flutter/flutter_list.html"></include>
+    <script type="text/javascript">
+        document.write(aside_list.import.body.innerHTML)
+    </script>
 
   <!-- end #posts-list -->
 </aside> <!-- end #sidebar -->
