@@ -37,7 +37,7 @@ html, body {
   font-size: 14px;
   -webkit-font-smoothing: subpixel-antialiased;
   -webkit-text-size-adjust: none;
-  overflow: hidden; }
+  overflow: scroll; }
 
 a {
   color: inherit;

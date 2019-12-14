@@ -11,7 +11,12 @@
 
     <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/font-awesome.min.css">
-    <link rel="import" href="flutter_list.html" id="aside_list"/>
+    <style>
+        iframe {
+            border-width: 0px;
+            overflow-scrolling: auto;
+        }
+    </style>
 
 </head>
 <body>
@@ -20,11 +25,28 @@
         <a href="/index1.html" id="avatar"></a>
 
         <ul id="tags__ul">
-            <li id="js-label1" class="tags__li tags-btn">Flutter<span class="post_count"></span></li>
-            <li id="js-label2" class="tags__li tags-btn">Android<span class="post_count"></span></li>
-            <li id="js-label3" class="tags__li tags-btn">Goland<span class="post_count"></span></li>
-            <li id="js-label4" class="tags__li tags-btn">Database<span class="post_count"></span></li>
-            <li id="js-label5" class="tags__li tags-btn">Linux<span class="post_count"></span></li>
+            <a href="/Flutter/基于GRPC的应用开发基础框架.html">
+                <li id="js-label1" class="tags__li tags-btn">
+                    Flutter
+                    <span class="post_count">4</span>
+                </li>
+            </a>
+            <li id="js-label2" class="tags__li tags-btn">
+                Android
+                <span class="post_count"></span>
+            </li>
+            <li id="js-label3" class="tags__li tags-btn">
+                Goland
+                <span class="post_count"></span>
+            </li>
+            <li id="js-label4" class="tags__li tags-btn">
+                Database
+                <span class="post_count"></span>
+            </li>
+            <li id="js-label5" class="tags__li tags-btn">
+                Linux
+                <span class="post_count"></span>
+            </li>
         </ul>
 
         <div id="tags__bottom">
@@ -33,17 +55,11 @@
         </div>
     </nav> <!-- end #tags -->
 
-    <script type="text/javascript">
-        document.write(aside_list.import.body.innerHTML)
-    </script>
 </aside> <!-- end #sidebar -->
 
 <div id="post">
     <div id="pjax">
-        <article id="post__content">
-            <h1 class="post__title">通用工具整理</h1>
-
-        </article> <!-- end #post__content -->
+        <iframe src="my/my_info.html" width="100%" height="800px"/> <!-- end #post__content -->
     </div> <!-- end #pjax -->
 </div> <!-- end #post -->
 
