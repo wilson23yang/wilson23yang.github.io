@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Wilson个人主页</title>
+
+    <link rel="stylesheet" href="../assets/css/style.css" type="text/css">
+</head>
+<body>
+
+<div id="aside"></div>
+
+<div id="article_list">
+    <ul>
+        <li><a href="javascript:void(0);">基于GRPC+Redux的应用开发基础框架</a></li>
+        <li><a href="javascript:void(0);">smart widget</a></li>
+        <li><a href="javascript:void(0);">K线图 Candlesticks</a></li>
+        <li><a href="javascript:void(0);">手机号国家码选择器</a></li>
+    </ul>
+</div>
+
+<div id="article_container">
+
+
+</div>
+
+
+<script src="../assets/js/jquery-1.12.4.js"></script>
+<script src="assets/js/nprogress.js"></script>
+<script src="../assets/js/script.js"></script>
+<script>
+    $(function () {
+        $("#aside").load("../common_page/aside.html",function () {
+            loadJQueryScript(1);
+
+            $("#article_container").html("");
+            var urls = ["flutter_app_dev","smart_widget","candlesticks","country_code"];
+            $("#article_container").load("../markdown/preview/"+ urls[0]+".html");
+            $("#article_list li").on("click",function () {
+                $("#article_container").html("");
+
+                $.get("../markdown/preview/"+ urls[$(this).index()]+".html",function () {
+                    
+                }).success(function (data, textStatus, xhr) {
+                    console.log(data);
+                    console.log(textStatus);
+                    console.log(xhr);
+                    $("#article_container").html(data);
+                });
+            });
+        }).css("height", $(window).height());
+    });
+</script>
+</body>
+</html>

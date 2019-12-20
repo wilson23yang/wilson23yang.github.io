@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Wilson个人主页</title>
+
+    <link rel="stylesheet" href="../assets/css/style.css" type="text/css">
+</head>
+<body>
+
+<div id="aside"></div>
+
+<div id="article_list">
+    <ul>
+        <li><a href="javascript:void(0);">移动端本地播放m3u8原理</a></li>
+        <li><a href="javascript:void(0);">Jni打日志到logcat</a></li>
+        <li><a href="javascript:void(0);">关于AndroidRuntime类的几个方法</a></li>
+        <li><a href="javascript:void(0);">Handler...调用过程源码浅析与理解图</a></li>
+    </ul>
+</div>
+
+<div id="article_container">
+
+
+</div>
+
+
+<script src="../assets/js/jquery-1.12.4.js"></script>
+<script src="assets/js/nprogress.js"></script>
+<script src="../assets/js/script.js"></script>
+<script>
+    $(function () {
+        $("#aside").load("../common_page/aside.html",function () {
+            loadJQueryScript(2);
+
+            $("#article_container").html("");
+
+            var urls = [
+                "移动端本地播放m3u8原理",
+                "Jni打日志到logcat",
+                "关于AndroidRuntime类的几个方法",
+                "Handler_Message_MessageQueue_Looper调用过程源码浅析与理解"
+            ];
+
+            $("#article_container").load("./"+ urls[0]+".html");
+            $("#article_list li").on("click",function () {
+                $("#article_container").html("");
+
+                $.get("./"+ urls[$(this).index()]+".html",function () {
+                    
+                }).success(function (data, textStatus, xhr) {
+                    console.log(data);
+                    console.log(textStatus);
+                    console.log(xhr);
+                    $("#article_container").html(data);
+                });
+            });
+        }).css("height", $(window).height());
+    });
+</script>
+</body>
+</html>

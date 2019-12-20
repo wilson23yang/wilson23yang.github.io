@@ -1,0 +1,319 @@
+<html>
+  <head>
+	  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>i5ting_ztree_toc:smart_widget</title>
+		<link href="toc/style/github-bf51422f4bb36427d391e4b75a1daa083c2d840e.css" media="all" rel="stylesheet" type="text/css"/>
+		<link href="toc/style/github2-d731afd4f624c99a4b19ad69f3083cd6d02b81d5.css" media="all" rel="stylesheet" type="text/css"/>
+		<link href="toc/css/zTreeStyle/zTreeStyle.css" media="all" rel="stylesheet" type="text/css"/>
+	  <style>
+		pre {
+		    counter-reset: line-numbering;
+		    border: solid 1px #d9d9d9;
+		    border-radius: 0;
+		    background: #fff;
+		    padding: 0;
+		    line-height: 23px;
+		    margin-bottom: 30px;
+		    white-space: pre;
+		    overflow-x: auto;
+		    word-break: inherit;
+		    word-wrap: inherit;
+		}
+
+		pre a::before {
+		  content: counter(line-numbering);
+		  counter-increment: line-numbering;
+		  padding-right: 1em; /* space after numbers */
+		  width: 25px;
+		  text-align: right;
+		  opacity: 0.7;
+		  display: inline-block;
+		  color: #aaa;
+		  background: #eee;
+		  margin-right: 16px;
+		  padding: 2px 10px;
+		  font-size: 13px;
+		  -webkit-touch-callout: none;
+		  -webkit-user-select: none;
+		  -khtml-user-select: none;
+		  -moz-user-select: none;
+		  -ms-user-select: none;
+		  user-select: none;
+		}
+
+		pre a:first-of-type::before {
+		  padding-top: 10px;
+		}
+
+		pre a:last-of-type::before {
+		  padding-bottom: 10px;
+		}
+
+		pre a:only-of-type::before {
+		  padding: 10px;
+		}
+
+		.highlight { background-color: #ffffcc } /* RIGHT */
+		</style>
+  </head>
+  <body>
+	  <div>
+        <div id='readme' style="margin: 30px 50px;overflow: scroll;">
+          	<article class='markdown-body' style="width: 800px;">
+            	<h1 id="widget-">widget使用说明与显示效果</h1>
+                <p><a href="https://github.com/wilson23yang/flutter_app_dev.git">【项目Github地址:https://github.com/wilson23yang/flutter_app_dev.git】</a></p>
+<h2 id="swscaffold">SWScaffold</h2>
+<pre><code>带沉浸式action bar的通用scaffold,
+支持沉浸式图片/背景色
+要显示沉浸式的action bar，需要将AppBar的背景色设置为透明色
+</code></pre><h4 id="example1-action-bar-">Example1:仅状态栏与action bar实现沉浸式</h4>
+<pre><code>  @override
+  Widget build(BuildContext context) {
+
+    return SWScaffold(
+      permeateImage: top_head,
+      backgroundColor: ColorUtil.color0F1928,
+      appBar:  SWAppBar(
+        title: Text(
+          MyLocalizations.of(context).joyride,
+          style: Dimen.instance().textHomeTitleStyle,
+        ),
+        elevation: 0.0,
+        centerTitle: true,
+        brightness:Brightness.dark,
+        backgroundColor: Colors.transparent,    //注意
+      ),
+      body: SWNetworkStatusWidget(
+        ctx: context,
+        showNotConnectedToast: true,
+        loadAgain: getData,
+        child: StreamBuilder&lt;Object&gt;(
+            stream: lampStreamController.stream,
+            builder: (context, snapshot) {
+              return SWAsyncSnapshotStatusWidget(snapshot:snapshot,dataBuilder:(snapshotData){
+                return _buildRenderDataWidget(context,snapshotData);
+              },reload: getData,);
+            }
+        ),
+      ),
+    );
+  } 
+</code></pre><p align="center">
+    <img src="../markdown/preview/img/sw_app_bar.jpg" alt="Sample"  width="242" height="156">
+</p>
+
+
+
+<h4 id="example2-action-bar-body-">Example2:状态栏、action bar，还有部分body都包含有沉浸式图片</h4>
+<pre><code>  @override
+  Widget build(BuildContext context) {
+    return SWScaffold(
+      backgroundColor: ColorUtil.color0F1928,
+      permeateImage: asset_top_background,
+      permeateBodyHeight : Adaptive.width(175),              body显示部分
+      appBar: SWAppBar(
+        title: Text( &#39;${MyLocalizations.of(context).asset}&#39;,
+          style: Dimen.instance().textHomeTitleStyle,
+        ),
+        elevation: 0.0,
+        centerTitle: true,
+        brightness:Brightness.dark,
+        backgroundColor:  Colors.transparent ,    //注意
+      ),
+      body: Container(
+      ),
+    );
+  }
+</code></pre><p align="center">
+    <img src="../markdown/preview/img/sw_scaffold.jpg" alt="Sample"  width="242" height="277">
+</p>
+
+
+<h4 id="example3-">Example3:无沉浸式图片</h4>
+<pre><code>    @override
+    Widget build(BuildContext context) {
+        return SWScaffold(
+          backgroundColor: ColorUtil.color0F1928,
+          appBar: SWAppBar(
+            title: Text( &#39;${MyLocalizations.of(context).asset}&#39;,
+              style: Dimen.instance().textHomeTitleStyle,
+            ),
+            elevation: 0.0,
+            centerTitle: true,
+            brightness:Brightness.dark,
+            backgroundColor: Colors.transparent,    //注意
+          ),
+          body: Container(
+          ),
+        );
+    }    
+</code></pre><h2 id="swnetworkstatuswidget">SWNetworkStatusWidget</h2>
+<pre><code>SWNetworkStatusWidget(
+    ctx: context,
+    showNotConnectedToast: true,
+    loadAgain: getData,
+    child: StreamBuilder&lt;Object&gt;(
+        stream: lampStreamController.stream,
+        builder: (context, snapshot) {
+          return SWAsyncSnapshotStatusWidget(snapshot:snapshot,dataBuilder:(snapshotData){
+            return _buildRenderDataWidget(context,snapshotData);
+          },reload: getData,);
+        }
+    ),
+)
+</code></pre><p align="center">
+    <img src="../markdown/preview/img/sw_network_status.jpg" alt="Sample"  width="225" height="167">
+</p>
+
+<h2 id="swappbar">SWAppBar</h2>
+<pre><code>SWAppBar(
+    title: Text(
+      MyLocalizations.of(context).joyride,
+      style: Dimen.instance().textHomeTitleStyle,
+    ),
+    elevation: 0.0,
+    centerTitle: true,
+    brightness:Brightness.dark,
+    backgroundColor: Colors.transparent,    //注意
+)
+</code></pre><p align="center">
+    <img src="../markdown/preview/img/sw_app_bar.jpg" alt="Sample"  width="242" height="156">
+</p>
+
+<h2 id="swasyncsnapshotstatuswidget">SWAsyncSnapshotStatusWidget</h2>
+<pre><code>a.统一处理网络加载过程状态，如加载中、异常状态，我们只需要关注正常显示处理逻辑
+b.可设置异常状态下是否重试，重试间隔随重试次数增大而增加，可缓解服务器请求压力
+c.可配置多种异常显示状态
+d.异常状态可手动重试
+</code></pre><p>  <strong> 注：该widget需要与StreamBuilder/FutureBuilder配合使用 </strong></p>
+<pre><code>StreamBuilder&lt;Object&gt;(
+    stream: lampStreamController.stream,
+    builder: (context, snapshot) {
+      return SWAsyncSnapshotStatusWidget(snapshot:snapshot,dataBuilder:(snapshotData){
+        return _buildRenderDataWidget(context,snapshotData);
+      },reload: getData,);
+    }
+)
+</code></pre><h2 id="swpopupmenu">SWPopupMenu</h2>
+<pre><code>SWPopupMenu(
+  imagePath: more,
+  items: TradeConstant.managerMenus,
+  callback: (value) {
+    switch (value) {
+      case &#39;订单记录&#39;:
+        break;
+      case &#39;广告管理&#39;:
+        break;
+      case &#39;收款方式&#39;:
+        break;
+      default:
+        break;
+    }
+  },
+);
+</code></pre><p align="center">
+    <img src="../markdown/preview/img/sw_popup_menu.jpg" alt="Sample"  width="280" height="180">
+</p>
+
+<h2 id="swswitch">SWSwitch</h2>
+<pre><code>SWSwitch(
+    value: item.enable,
+    onChanged: (bool value) {
+      enableBankcard(item);
+    },
+    activeColor: Colors.white,
+    inactiveColor: Colors.white.withOpacity(0.4),
+    thumbColor: getItemBgColor(bankcard: item),
+    inactiveThumbColor: getItemBgColor(bankcard: item),
+    width: Adaptive.width(26),
+    height: Adaptive.width(13),
+)
+</code></pre><p align="center">
+    <img src="../markdown/preview/img/sw_switch.jpg" alt="Sample"  width="267" height="413">
+</p>
+
+<h2 id="swtabs">SWTabs</h2>
+<pre><code>SWTabBar(
+    key: klineTabBarKey,
+    isScrollable: true,
+    controller: klineTabController,
+    indicatorSize: SWTabBarIndicatorSize.tab,
+    labelStyle: TextStyle(fontSize: 13, fontWeight: FontWeight.normal),
+    unselectedLabelStyle: TextStyle(fontSize: 11),
+    tabs: List.generate(klineBarItemData.klineTabBars.length,(int index) {
+      if (index &lt; 5) {
+        return Text(klineBarItemData.klineTabBars[index] ?? &#39;&#39;);
+      } else {
+        return Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.end,
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: &lt;Widget&gt;[
+            Text(
+              &#39;${klineBarItemData.klineTabBars[index]}&#39;,
+            ),
+            Padding(
+              padding: EdgeInsets.only(bottom: Adaptive.width(2)),
+              child: Image.asset(klineBarItemData.rightTriangle),
+            ),
+          ],
+        );
+      }
+    }).toList(),
+    tapIntercept: (int index) {
+      if (index &lt; 5) {
+        klineBarItemData.klineTabBars[
+                klineBarItemData.klineTabBars.length - 1] =
+            KlineTarBarItemData.moreItem;
+        klineBarItemData.currentMoreStyle =
+            klineBarItemData.moreItemDartTextStyle;
+        setState(() {});
+        return true;
+      } else {
+        if (klineBarItemData.klineTabBars[index] ==
+            KlineTarBarItemData.moreItem) {
+          klineBarItemData.currentMoreStyle =
+              klineBarItemData.moreItemLightTextStyle;
+          setState(() {});
+          showKlineHideItemBar();
+          return false;
+        } else {
+          showKlineHideItemBar();
+          return true;
+        }
+      }
+    },
+)
+</code></pre><p align="center">
+    <img src="../markdown/preview/img/sw_tab_bar_1.jpg" alt="Sample"  width="260" height="171">
+    <img src="../markdown/preview/img/sw_tab_bar_2.jpg" alt="Sample"  width="260" height="157">
+</p>
+
+<h2 id="draglocationwidget">DragLocationWidget</h2>
+<pre><code>DragLocationWidget(
+    dragLocationCallback: dragLocationCallback,
+),
+</code></pre><p align="center">
+    <img src="../markdown/preview/img/page.jpg" align="left" height="769" width="388" >
+</p>
+          	</article>
+        </div>
+		</div>
+  </body>
+</html>
+<script type="text/javascript" src="toc/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="toc/js/jquery.ztree.all-3.5.min.js"></script>
+<script type="text/javascript" src="toc/js/ztree_toc.js"></script>
+<script type="text/javascript" src="toc_conf.js"></script>
+
+<SCRIPT type="text/javascript" >
+<!--
+$(document).ready(function(){
+    var css_conf = eval(markdown_panel_style);
+    $('#readme').css(css_conf)
+    
+    var conf = eval(jquery_ztree_toc_opts);
+		$('#tree').ztree_toc(conf);
+});
+//-->
+</SCRIPT>

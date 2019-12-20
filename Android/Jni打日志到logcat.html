@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jni打日志到logcat</title>
+    <style>
+        .content_page {
+            width: 800px;
+            margin: 30px 50px;
+        }
+
+        .content_page p {
+            font-size: 14px;
+            line-height: 25px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="content_page">
+
+    <h3>----------------eclipse----------------</h3>
+
+    <h4>1 添加ndk对log支持</h4>
+    <p></p>若需要添加ndk对log的支持，只需要通过以下2步即可实现。
+
+
+    <h5>1.1 修改Android.mk</h5>
+    <p>如生成的库文件是“.so文件”，则在Android.mk中添加如下内容：<br />
+        LOCAL_LDLIBS:=-L$(SYSROOT)/usr/lib -llog<br />
+        如生成的库文件是“.a文件”，则在Android.mk中添加如下内容：<br />
+        LOCAL_LDLIBS:=-llog</p>
+
+    <h5>1.2 在.c或.cpp文件中引用log头文件</h5>
+    <p>添加如下内容：<br />
+        // 引入log头文件<br />
+        #include  &lt;android/log.h><br />
+        // log标签<br />
+        #define  TAG    "这里填写日志的TAG"<br />
+        // 定义info信息<br />
+        #define LOGI(...) __android_log_print(ANDROID_LOG_INFO,TAG,__VA_ARGS__)<br />
+        // 定义debug信息<br />
+        #define LOGD(...) __android_log_print(ANDROID_LOG_DEBUG, TAG, __VA_ARGS__)<br />
+        // 定义error信息<br />
+        #define LOGE(...) __android_log_print(ANDROID_LOG_ERROR,TAG,__VA_ARGS__)<br />
+
+        ANDROID_LOG_INFO：是日志级别；<br />
+        TAG：是要过滤的标签，可以在LogCat视图中过滤。<br />
+        __VA_ARGS__：是实际的日志内容。<br />
+        完成上面2步之后，我们就可以在.c/cpp文件中添加LOGI、LOGD、LOGE去打印信息！使用LOGI、LOGD、LOGE的方法和使用printf一样</p>
+
+    <h5>1.3日志类型</h5>
+    <p>1）Log.v 的调试颜色为黑色的，任何消息都会输出，这里的v代表verbose啰嗦的意思，平时使用就是Log.v(,);<br />
+        2）Log.d的输出颜色是蓝色的，仅输出debug调试的意思，但他会输出上层的信息，过滤起来可以通过DDMS的Logcat标签来选择<br />
+        3）Log.i的输出为绿色，一般提示性的消息information，它不会输出Log.v和Log.d的信息，但会显示i、w和e的信息<br />
+        4）Log.w的意思为橙色，可以看作为warning警告，一般需要我们注意优化Android代码，同时选择它后还会输出Log.e的信息。<br />
+        5）Log.e为红色，可以想到error错误，这里仅显示红色的错误信息，这些错误就需要我们认真的分析，查看栈的信息了。</p>
+
+
+
+    <p>如：<br />
+
+        LOGI("user info----name:%s, age:%d, sex:%s.", "xxx", 18, "男");<br />
+
+        执行上句代码可以再logcat中打印出相应日志。</p>
+
+    <p>注意：log打印的方法中不能传入jstring，必须将jstring转为c中的字符数组在传入到方法里面打印，否则会报错。</p>
+
+    <br />
+    <h3>----------------Android Studio-----------------</h3>
+
+    <p>build.gradle文件在defaultConfig节点添加<br />
+        ndk<br />
+        {<br />
+        moduleName "hello"<br />
+        abiFilters "armeabi","armeabi-v7a","x86"<br />
+        ldLibs "log"<br />
+        }</p>
+    <br />
+    <p>然后在编写的c或者c++文件中添加</p>
+    <p>#include &lt;android/log.h><br />
+
+        #define  LOG_TAG    "test===="<br />
+        #define  LOGI(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)<br />
+        #define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR, LOG_TAG, __VA_ARGS__)<br />
+        #define LOGD(...)  __android_log_print(ANDROID_LOG_INFO, LOG_TAG, __VA_ARGS__)<br />
+
+        调用LOGI("======TEST======");即可</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

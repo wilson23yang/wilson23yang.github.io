@@ -2,47 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>个人主页</title>
-    <style>
-        *{
-            margin: 0;
-            padding: 0;
-        }
-        article h2 {
-            font-size: 22px;
-            color: #2A2A2A;
-            margin-top: 15px;
-            margin-bottom: 30px;
-        }
-        article h4 {
-            font-size: 18px;
-            color: #2A2A2A;
-            margin-top: 15px;
-            margin-bottom: 15px;
-        }
-        article p {
-            font-size: 16px;
-            color: #4a4a4a;
-            line-height: 30px;
-        }
-        hr {
-            margin-top: 15px;
-            margin-bottom: 15px;
-        }
-        a {
-            color: #2A2A2A;
-            text-decoration: none;
-        }
-        a:hover {
-            color: #1d7fb3;
-        }
-        .pageContent {
-            width: 960px;
-            margin: 0 auto;
-        }
-    </style>
+    <title>Wilson个人主页</title>
+
+    <link rel="stylesheet" href="assets/css/style.css" type="text/css">
 </head>
 <body>
+
+<div id="aside"></div>
+
 <div class="pageContent">
     <article >
 
@@ -81,7 +48,7 @@
 
         <h4>Flutter开源项目</h4>
         <p>
-            <a href="https://github.com/wilson23yang/candlesticks/tree/bnb">《K线图》</a><br/>
+            <a href="https://github.com/wilson23yang/candlesticks">《K线图》</a><br/>
             <a href="https://github.com/wilson23yang/smart_widget">《smart_widget》</a><br/>
             <a href="https://github.com/wilson23yang/flutter_app_dev">《基于GRPC的应用开发基础框架》</a><br/>
             <a href="https://github.com/wilson23yang/country_code">《country_code》</a><br/>
@@ -90,6 +57,18 @@
         <hr/>
     </article>
 </div>
+
+<script src="assets/js/nprogress.js"></script>
+<script src="assets/js/jquery-1.12.4.js"></script>
+<script src="assets/js/script.js"></script>
+<script>
+    $(function () {
+        $("#aside").load("common_page/index_aside.html",function () {
+            loadJQueryScript();
+        }).css("height", $(window).height());
+
+    });
+</script>
 
 </body>
 </html>

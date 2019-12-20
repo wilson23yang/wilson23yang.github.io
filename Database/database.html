@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Wilson个人主页</title>
+
+    <link rel="stylesheet" href="../assets/css/style.css" type="text/css">
+</head>
+<body>
+
+<div id="aside"></div>
+
+<div id="article_list">
+    <ul>
+
+    </ul>
+</div>
+
+<div id="article_container">
+
+
+</div>
+
+
+<script src="../assets/js/jquery-1.12.4.js"></script>
+<script src="assets/js/nprogress.js"></script>
+<script src="../assets/js/script.js"></script>
+<script>
+    $(function () {
+        $("#aside").load("../common_page/aside.html",function () {
+            loadJQueryScript(4);
+
+            $("#article_container").html("");
+            var urls = ["","","",""];
+            $("#article_container").load("../markdown/preview/"+ urls[0]+".html");
+            $("#article_list li").on("click",function () {
+                $("#article_container").html("");
+
+                $.get("../markdown/preview/"+ urls[$(this).index()]+".html",function () {
+                    
+                }).success(function (data, textStatus, xhr) {
+                    console.log(data);
+                    console.log(textStatus);
+                    console.log(xhr);
+                    $("#article_container").html(data);
+                });
+            });
+        }).css("height", $(window).height());
+    });
+</script>
+</body>
+</html>

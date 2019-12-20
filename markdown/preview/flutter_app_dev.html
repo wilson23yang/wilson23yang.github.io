@@ -1,0 +1,186 @@
+<html>
+  <head>
+	  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>i5ting_ztree_toc:flutter_app_dev</title>
+		<link href="toc/style/github-bf51422f4bb36427d391e4b75a1daa083c2d840e.css" media="all" rel="stylesheet" type="text/css"/>
+		<link href="toc/style/github2-d731afd4f624c99a4b19ad69f3083cd6d02b81d5.css" media="all" rel="stylesheet" type="text/css"/>
+		<link href="toc/css/zTreeStyle/zTreeStyle.css" media="all" rel="stylesheet" type="text/css"/>
+	  <style>
+		pre {
+		    counter-reset: line-numbering;
+		    border: solid 1px #d9d9d9;
+		    border-radius: 0;
+		    background: #fff;
+		    padding: 0;
+		    line-height: 23px;
+		    margin-bottom: 30px;
+		    white-space: pre;
+		    overflow-x: auto;
+		    word-break: inherit;
+		    word-wrap: inherit;
+		}
+
+		pre a::before {
+		  content: counter(line-numbering);
+		  counter-increment: line-numbering;
+		  padding-right: 1em; /* space after numbers */
+		  width: 25px;
+		  text-align: right;
+		  opacity: 0.7;
+		  display: inline-block;
+		  color: #aaa;
+		  background: #eee;
+		  margin-right: 16px;
+		  padding: 2px 10px;
+		  font-size: 13px;
+		  -webkit-touch-callout: none;
+		  -webkit-user-select: none;
+		  -khtml-user-select: none;
+		  -moz-user-select: none;
+		  -ms-user-select: none;
+		  user-select: none;
+		}
+
+		pre a:first-of-type::before {
+		  padding-top: 10px;
+		}
+
+		pre a:last-of-type::before {
+		  padding-bottom: 10px;
+		}
+
+		pre a:only-of-type::before {
+		  padding: 10px;
+		}
+
+		.highlight { background-color: #ffffcc } /* RIGHT */
+		</style>
+  </head>
+  <body>
+	  <div>
+        <div id='readme' style="margin: 30px 50px;overflow: scroll;">
+          	<article class='markdown-body' style="width: 800px;">
+            	<h1 id="-">应用开发框架</h1>
+                <br />
+<p><a href="https://github.com/wilson23yang/flutter_app_dev.git">【项目Github地址:https://github.com/wilson23yang/flutter_app_dev.git】</a></p>
+<p> 模块可配置</p>
+<p> 网络框架基于GRPC进行封装</p>
+<p> 实时状态传送更新与持久化使用Redux</p>
+<p> 资源文件引用使用脚本自动生成，加快开发</p>
+<h2 id="1-">1.应用模块可配置</h2>
+<pre><code>主页应用模块可动态配置设整，增删模块可通过ModuleConfig进行配置，无需修改MainPage。
+</code></pre><p>ModuleConfig配置示例如下：</p>
+<pre><code>///模块定义与配置
+class ModuleConfig{
+  ///首页
+  static Module _home = Module(
+    ModuleKey.home,
+    name: StringWrapper((context) =&gt; MyLocalizations.of(context).home),
+    desc: &#39;home&#39;,
+    icon: ImageTheme.instance().nav_home_n,
+    iconPress: ImageTheme.instance().nav_home_p,
+    entrance: (context,{p1,p2,p3}) =&gt; HomePage(),
+  );
+
+  ///我的
+  static Module _mine = Module(
+    ModuleKey.mine,
+    name: StringWrapper((context) =&gt; MyLocalizations.of(context).mime),
+    desc: &#39;mine&#39;,
+    icon: ImageTheme.instance().nav_my_n,
+    iconPress: ImageTheme.instance().nav_my_p,
+    entrance: (context,{p1,p2,p3}) =&gt; MyPage(),
+  );
+
+
+  ///app模块
+  static List&lt;Module&gt; _modules = [_home, ... ,_mine];
+
+  static const int initTabIndex = 0;
+
+  ...
+
+}
+
+</code></pre><h2 id="2-grpc">2.网络基于GRPC</h2>
+<pre><code>网络模块基于GRPC,并对GRPC请求与响应进行统一封装处理，调用简单方便
+
+a.GRPC请求与响应进行统一封装处理
+    位于：lib/infrastructures/api/api_request.dart
+
+    static Future&lt;T&gt; grpcFuture&lt;T,K&gt;({
+        @required String tag, 
+        @required GRPCCall grpcCall,
+        @required GRPCRequest&lt;K&gt; request,GRPCResponse&lt;T&gt; response,
+        bool printDebugLog = true,bool cancelDoubleCall = false
+    }) async
+    {
+        ...
+    }
+
+b.错误码统一定义与管理，可对共性错误码统一处理
+
+c.调用示例：
+```
+Future&lt;RegisterRes&gt; register({
+    @required String name,
+    @required String password,
+    @required String inviteCode
+}){
+  return ApiRequest.grpcFuture(
+    tag: &#39;register&#39;,
+    request: () async {
+      var pwd = Utf8Encoder().convert(password);
+      var digest = md5.convert(pwd);
+      return RegisterReq()..name=name
+              ..passwordMd5=hex.encode(digest.bytes)
+              ..parentCode=Int64(int.parse(inviteCode));
+    },
+    grpcCall: (request) =&gt; GRPCManager.getAccountNoAuthClient().register(request),
+    response: ({rsp,headers}) =&gt; rsp,
+  );
+}
+```
+</code></pre><h2 id="3-">3.资源管理</h2>
+<pre><code>资源管理包括：应用主题、颜色、图片、字符串常量、样式。【/lib/res】
+
+
+a.主题管理
+    通过lib/res/theme_manager.dart  ThemeManager可切换应用主题，如白天黑夜模式
+
+b.图片
+    将图片资源根据主题在ImageTheme中定义，然后通过lib/res/images/script.dart
+    生成对应主题资源源文件供调用
+
+c.颜色
+    将颜色资源根据主题在ColorTheme中定义，然后通过lib/res/colors/script.dart
+    生成对应主题资源源文件供调用
+
+d.样式
+    页面样式按功能模块统一管理
+
+e.字符串常量及国际化
+    /lib/res/localizations
+</code></pre><h2 id="4-redux-">4.redux之实时状态传送更新与持久化</h2>
+
+          	</article>
+        </div>
+		</div>
+  </body>
+</html>
+<script type="text/javascript" src="toc/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="toc/js/jquery.ztree.all-3.5.min.js"></script>
+<script type="text/javascript" src="toc/js/ztree_toc.js"></script>
+<script type="text/javascript" src="toc_conf.js"></script>
+
+<SCRIPT type="text/javascript" >
+<!--
+$(document).ready(function(){
+    var css_conf = eval(markdown_panel_style);
+    $('#readme').css(css_conf)
+    
+    var conf = eval(jquery_ztree_toc_opts);
+		$('#tree').ztree_toc(conf);
+});
+//-->
+</SCRIPT>
